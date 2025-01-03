@@ -1,34 +1,22 @@
-package specifications;
+package specifications.searching;
+
+import specifications.AlgorithmSpecification;
 
 import java.util.Arrays;
 
 public interface SearchingSpecification extends AlgorithmSpecification {
     @Override
     default boolean validatePreconditions(Object... args) {
-        // Ensure sufficient arguments are passed
-        if (args.length < 2 || !(args[0] instanceof int[]) || !(args[1] instanceof Integer)) {
-            return false; // Invalid input
-        }
-        int[] array = (int[]) args[0];
-
-        // Check if the array is sorted
-        for (int i = 1; i < array.length; i++) {
-            if (array[i] < array[i - 1]) {
-                return false; // Array is not sorted
-            }
-        }
-
-        return true; // Preconditions satisfied
+        return args.length >= 2 && args[0] instanceof int[] && args[1] instanceof Integer; // Invalid input
     }
 
     @Override
     default boolean validatePostconditions(Object result, Object... args) {
-        if (!(args[0] instanceof int[]) || !(args[1] instanceof Integer)) {
+        if (!(args[0] instanceof int[] array) || !(args[1] instanceof Integer)) {
             System.out.println("Postcondition failed: Invalid arguments.");
             return false;
         }
 
-        int[] array = (int[]) args[0];
         int key = (Integer) args[1];
         int index = (result instanceof Integer) ? (Integer) result : -1;
 

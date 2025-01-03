@@ -1,14 +1,12 @@
-package algorithms.sorting;
+package algorithms.sorting.selection;
 
 import algorithms.Algorithm;
-import algorithms.AlgorithmPreparer;
-import specifications.SelectionSortSpecification;
-import specifications.SortingSpecification;
+import specifications.sorting.selection.SelectionSortSpecification;
+import specifications.sorting.SortingSpecification;
 import utils.TotalCorrectnessChecker;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
 
 public class SelectionSort extends Algorithm {
@@ -88,43 +86,4 @@ public class SelectionSort extends Algorithm {
         // Output the result
         System.out.println("Selection Sort Total Correctness: " + (isCorrect ? "PASSED" : "FAILED"));
     }
-
-    public static class SelectionSortRunnable implements Runnable, AlgorithmPreparer {
-        private int[] S;
-        private SortingSpecification spec;
-        private SelectionSort instance;
-
-        public SelectionSortRunnable(SelectionSort instance) {
-            this.instance = instance;
-        }
-
-        public SelectionSortRunnable(final int[] S, SortingSpecification spec, SelectionSort instance) {
-            this.S = S;
-            this.spec = spec;
-            this.instance = instance;
-        }
-
-        @Override
-        public Runnable prepareRunnable(int n) {
-            long prepStartTime = System.nanoTime();
-
-            int[] S = new int[n];
-            Random random = new Random();
-            for (int i = 0; i < n; i++) {
-                S[i] = random.nextInt(10_000);
-            }
-
-            long prepEndTime = System.nanoTime();
-            System.out.println("Array preparation time for input size " + n + ": "
-                    + ((prepEndTime - prepStartTime) / 1e6) + " ms");
-
-            return new SelectionSortRunnable(S, new SelectionSortSpecification(), this.instance);
-        }
-
-        @Override
-        public void run() {
-            instance.sort(S, S.length, spec);
-        }
-    }
-
 }

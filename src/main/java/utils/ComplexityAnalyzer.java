@@ -2,8 +2,14 @@ package utils;
 
 import algorithms.Algorithm;
 import algorithms.AlgorithmPreparer;
-import algorithms.searching.BinarySearch;
-import algorithms.sorting.SelectionSort;
+import algorithms.searching.binary.BinarySearch;
+import algorithms.searching.binary.BinarySearchRunnable;
+import algorithms.searching.linear.LinearSearch;
+import algorithms.searching.linear.LinearSearchRunnable;
+import algorithms.sorting.insertion.InsertionSort;
+import algorithms.sorting.insertion.InsertionSortRunnable;
+import algorithms.sorting.selection.SelectionSort;
+import algorithms.sorting.selection.SelectionSortRunnable;
 import org.apache.commons.math3.fitting.WeightedObservedPoint;
 import org.jetbrains.annotations.NotNull;
 import org.jfree.chart.ChartFactory;
@@ -15,7 +21,7 @@ import org.apache.commons.math3.fitting.WeightedObservedPoints;
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
 import specifications.AlgorithmSpecification;
-import specifications.BinarySearchSpecification;
+import specifications.searching.binary.BinarySearchSpecification;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -28,41 +34,72 @@ public class ComplexityAnalyzer {
     public static AlgorithmSpecification currentSpecification;
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        List<Class<?>> algorithms = new ArrayList<>();
+
+        algorithms.add(BinarySearch.class);
+        algorithms.add(LinearSearch.class);
+        algorithms.add(SelectionSort.class);
+        algorithms.add(InsertionSort.class);
 
         System.out.println("Choose an algorithm to run:");
-        System.out.println("1. Binary Search");
-        System.out.println("2. Selection Sort");
-        System.out.print("Enter your choice (1 or 2): ");
+        for (int i = 0; i < algorithms.size(); i++) {
+            System.out.println((i + 1) + ". " + algorithms.get(i).getSimpleName());
+        }
+        System.out.print("Enter your choice (1 to " + algorithms.size() + "): ");
 
+        Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
         scanner.close();
 
-        warmUp();
+        if (choice < 1 || choice > algorithms.size()) {
+            System.out.println("Invalid choice! Please restart the program and enter a valid number.");
+            return;
+        }
+
+        Class<?> chosenAlgorithm = algorithms.get(choice - 1);
+        System.out.println("Running " + chosenAlgorithm.getSimpleName() + "...");
 
         switch (choice) {
             case 1 -> {
-                System.out.println("Running Binary Search...");
                 runBinarySearch();
             }
             case 2 -> {
-                System.out.println("Running Selection Sort...");
+                runLinearSearch();
+            }
+            case 3 -> {
                 runSelectionSort();
+            }
+            case 4 -> {
+                runInsertionSort();
             }
             default -> System.out.println("Invalid choice! Please restart the program and enter 1 or 2.");
         }
     }
 
+
     private static void runSelectionSort() {
         int[] inputSizes = {1, 10, 100};
         SelectionSort selectionSort = new SelectionSort();
-        ComplexityAnalyzer.analyzeAlgorithm(inputSizes, new SelectionSort.SelectionSortRunnable(selectionSort), selectionSort);
+        ComplexityAnalyzer.analyzeAlgorithm(inputSizes, new SelectionSortRunnable(selectionSort), selectionSort);
     }
 
     private static void runBinarySearch() {
         int[] inputSizes = {100, 1000, 10000, 100000};
         BinarySearch binarySearch = new BinarySearch();
-        ComplexityAnalyzer.analyzeAlgorithm(inputSizes, new BinarySearch.BinarySearchRunnable(binarySearch), binarySearch);
+        ComplexityAnalyzer.analyzeAlgorithm(inputSizes, new BinarySearchRunnable(binarySearch), binarySearch);
+    }
+
+
+    private static void runLinearSearch() {
+        int[] inputSizes = {100, 1000, 10000, 100000};
+        LinearSearch linearSearch = new LinearSearch();
+        ComplexityAnalyzer.analyzeAlgorithm(inputSizes, new LinearSearchRunnable(linearSearch), linearSearch);
+    }
+
+    private static void runInsertionSort() {
+        int[] inputSizes = {100, 1000, 2000};
+        InsertionSort insertionSort = new InsertionSort();
+        ComplexityAnalyzer.analyzeAlgorithm(inputSizes, new InsertionSortRunnable(insertionSort), insertionSort);
     }
 
     public static void analyzeAlgorithm(int[] inputSizes, AlgorithmPreparer preparer, Algorithm algorithmClass) {
@@ -118,13 +155,7 @@ public class ComplexityAnalyzer {
     }
 
     private static int getDominantOperationCount(@NotNull Algorithm algorithm) {
-        return switch (algorithm.getClass().getSimpleName()) {
-            case "BinarySearch" -> ((BinarySearch) algorithm).dominantOperationCount;
-            case "SelectionSort" -> ((SelectionSort) algorithm).dominantOperationCount;
-            default -> throw new UnsupportedOperationException(
-                    "Dominant operation count not defined for: " + algorithm.getClass().getSimpleName()
-            );
-        };
+        return algorithm.dominantOperationCount;
     }
 
     private static void printAnalysisResults(int[] inputSizes, List<Double> times, List<Integer> dominantOperations) {

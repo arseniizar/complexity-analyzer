@@ -1,6 +1,6 @@
-package specifications;
+package specifications.sorting;
 
-import java.util.Arrays;
+import specifications.AlgorithmSpecification;
 
 public interface SortingSpecification extends AlgorithmSpecification {
     @Override
