@@ -86,4 +86,9 @@ public class SelectionSort extends Algorithm {
         // Output the result
         System.out.println("Selection Sort Total Correctness: " + (isCorrect ? "PASSED" : "FAILED"));
     }
+
+    @Override
+    public void visualize() {
+
+    }
 }

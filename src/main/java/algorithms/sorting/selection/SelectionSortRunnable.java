@@ -5,7 +5,6 @@ import specifications.sorting.selection.SelectionSortSpecification;
 import specifications.sorting.SortingSpecification;
 
 public class SelectionSortRunnable extends BaseSortingRunnable {
-    private int[] S;
     private final SelectionSort instance;
 
     public SelectionSortRunnable(SelectionSort instance) {
@@ -13,7 +12,7 @@ public class SelectionSortRunnable extends BaseSortingRunnable {
     }
 
     public SelectionSortRunnable(final int[] S, SortingSpecification spec, SelectionSort instance) {
-        this.S = S;
+        this.array = S;
         this.spec = spec;
         this.instance = instance;
     }
@@ -21,12 +20,12 @@ public class SelectionSortRunnable extends BaseSortingRunnable {
     @Override
     public Runnable prepareRunnable(int n) {
         prepareArrayForSorting(n);
-        return new SelectionSortRunnable(S, new SelectionSortSpecification(), this.instance);
+        return new SelectionSortRunnable(array, new SelectionSortSpecification(), this.instance);
     }
 
     @Override
     public void run() {
-        instance.sort(S, S.length, spec);
+        instance.sort(array, array.length, spec);
     }
 }
 

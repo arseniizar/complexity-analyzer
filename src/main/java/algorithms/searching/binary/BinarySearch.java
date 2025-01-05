@@ -74,6 +74,8 @@ public class BinarySearch extends Algorithm {
         System.out.println("Binary Search Total Correctness: " + (isCorrect ? "PASSED" : "FAILED"));
     }
 
+    @Override
+    public void visualize() {
 
-
+    }
 }

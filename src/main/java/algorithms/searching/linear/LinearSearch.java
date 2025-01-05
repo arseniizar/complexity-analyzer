@@ -69,4 +69,9 @@ public class LinearSearch extends Algorithm {
 
         System.out.println("Linear Search Total Correctness: " + (isCorrect ? "PASSED" : "FAILED"));
     }
+
+    @Override
+    public void visualize() {
+
+    }
 }

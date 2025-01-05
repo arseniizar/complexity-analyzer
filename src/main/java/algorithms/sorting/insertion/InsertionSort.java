@@ -75,4 +75,9 @@ public class InsertionSort extends Algorithm {
         // Output the result
         System.out.println("Insertion Sort Total Correctness: " + (isCorrect ? "PASSED" : "FAILED"));
     }
+
+    @Override
+    public void visualize() {
+
+    }
 }
